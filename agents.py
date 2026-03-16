@@ -31,7 +31,7 @@ class MasterDecision(BaseModel):
 # Force the Master Agent to output ONLY this structure
 master_llm = llm.with_structured_output(MasterDecision)
 
-# 3. Define the System Prompts (The "Personas")
+# 3. Define the System Prompts
 NEWS_PROMPT = """You are the Senior Financial News Analyst.
 Your job is to read the provided raw news data and extract the true market sentiment.
 
@@ -53,17 +53,18 @@ INSTRUCTIONS:
 
 Output a strict verdict on whether the asset is currently OVERVALUED, UNDERVALUED, or FAIRLY VALUED, and explain the mathematical reasoning."""
 
-RISK_PROMPT = """You are the Chief Risk Officer and Technical Analyst.
-Your job is to analyze price momentum, volatility, and technical indicators.
+RISK_PROMPT = """You are the Chief Risk Officer and Quantitative Analyst.
+Your job is to evaluate the asset's technical momentum and institutional risk profile.
 
 INSTRUCTIONS:
-1. Analyze the 1-Month Change to determine short-term momentum.
-2. Compare the Current Price to the 50-Day and 200-Day Moving Averages (MA) to determine the macro trend.
-3. Analyze the 14-Day RSI (Relative Strength Index):
-   - If RSI > 70: Warn that the asset is OVERBOUGHT and faces high risk of a pullback.
-   - If RSI < 30: Note that the asset is OVERSOLD and may represent a rebound opportunity.
+1. Technical Trend: Compare Current Price to the 50-Day and 200-Day Moving Averages.
+2. Momentum: Analyze the 14-Day RSI. Warn explicitly if it is Overbought (>70) or Oversold (<30).
+3. Institutional Risk:
+   - Evaluate Beta: Is it highly volatile (>1.0) or stable (<1.0)?
+   - Evaluate Max Drawdown: How severe was the worst crash this year?
+   - Evaluate Sharpe Ratio: Is the asset generating good returns relative to its risk (>1.0)?
 
-Output a precise technical assessment of the current price action and risk level."""
+Output a precise, institutional-grade technical and risk assessment. Conclude if the asset is fundamentally safe or highly speculative."""
 
 MASTER_PROMPT = """You are the Lead Quantitative Portfolio Manager (The Glass Box Engine).
 You have received independent analyses from your News, Fundamentals, and Risk agents regarding the ticker: {ticker}.
