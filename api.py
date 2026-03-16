@@ -7,11 +7,11 @@ from graph import app
 api = FastAPI(title="Alpha Agent PoC API", description="The Glass Box Engine Backend")
 
 # 2. Add CORS Middleware
-# CRITICAL for the frontend: This allows a web browser UI (like a React app) 
+# CRITICAL for the frontend: This allows a web browser UI
 # to talk to our local Python server without security blockages.
 api.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # For PoC/Hackathon, we allow all origins.
+    allow_origins=["*"],  # For PoC, we allow all origins.
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
